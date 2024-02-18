@@ -14,6 +14,7 @@ namespace AutoMouse
         public Form1()
         {
             InitializeComponent();
+            SetFixedPositionAndShowDate();
         }
         //选择：滚动或者粘贴
         private static Boolean boolGun=false;
@@ -197,6 +198,21 @@ namespace AutoMouse
             MessageBox.Show("这是一个弹窗", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void SetFixedPositionAndShowDate()
+        {
+            label1.Location = new Point(208, 8);
+            label1.Text = DateTime.Now.ToString("yyyy-MM-dd");
+        }
+
+        private void label1_Click_1(object sender, EventArgs e)
         {
 
         }
