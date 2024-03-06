@@ -46,7 +46,7 @@ namespace AutoMouse
         const int MOUSEEVENTF_WHEEL = 0x800;            //模拟鼠标滑轮移动
 
 
-        //开始
+        //开始 按钮
         private void button1_Click(object sender, EventArgs e)
         {
             if (false == boolGun && false == boolZhantie && false == boolGunShang && false == boolDianJI)
@@ -75,7 +75,7 @@ namespace AutoMouse
 
         }
 
-        //停止
+        //按钮 停止
         private void button2_Click(object sender, EventArgs e)
         {
             if (false == boolGun && false == boolZhantie && false == boolGunShang && false == boolDianJI)
@@ -83,11 +83,26 @@ namespace AutoMouse
                 MessageBox.Show("请选择操作类型~", "警告!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            timer1.Enabled = false;
-            
-           // textBox4.Text = "次数";
-            //timer1.Enabled = false;
-        } 
+            TimerStop();
+        }
+
+        /// <summary>
+        /// timer开始
+        /// </summary>
+        private void TimerRun()
+        {
+            timer1.Enabled = true;//设置启用定时器
+            timer1.Interval = 5000;//默认时间
+            timer1.Start();//开启定时器
+        }
+        /// <summary>
+        /// timer停止
+        /// </summary>
+        private void TimerStop()
+        {
+            timer1.Enabled = false;//设置启用定时器
+            timer1.Stop();//停止定时器
+        }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
@@ -106,10 +121,8 @@ namespace AutoMouse
                 else
                 {
                     count = -100;//负数代表向下移动
-                }
-
-                //滚动鼠标一次
-                gunDong();
+                }                
+                gunDong();//滚动鼠标一次
             }
             //1.1 向上滚
             if (true == boolGunShang)
@@ -121,9 +134,8 @@ namespace AutoMouse
                 else
                 {
                     count = 100;//正数代表向上移动
-                }
-                //滚动鼠标一次
-                gunDong();
+                }                
+                gunDong();//滚动鼠标一次
             }
             //2 粘贴 并回车
             if (true == boolZhantie) {
@@ -134,21 +146,16 @@ namespace AutoMouse
             }
             //连续点击
             if (true== boolDianJI) {
-
                 MouseDJ.MouseClick(100, 0);
+
                 // 模拟鼠标点击事件
-               // SendKeys.SendWait("{RIGHT}");
+                // SendKeys.SendWait("{RIGHT}");
                 // MessageBox.Show("点击"+ tmptime, "警告!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
             //计数
             timeNums++;
-            textBox4.Text = "" + timeNums;
-
-       /*     if (timer1.Enabled ==true) {
-                timeNums++;
-                textBox4.Text = "" + timeNums;
-            } */         
+            textBox4.Text = "" + timeNums;     
         }
         private void textBox4_TextChanged(object sender, EventArgs e)
         {
@@ -166,7 +173,7 @@ namespace AutoMouse
             }
             catch (Exception eee)
             {
-                timer1.Enabled = false;
+                TimerStop();
                 MessageBox.Show("引发此异常的原因是您输入的滚轮数值为非法格式\n您可以单击“确定”并检查输入信息后重试\n详细错误信息为：" + eee.Message, "错误提示", MessageBoxButtons.OK);
             }
         }
