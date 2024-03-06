@@ -4,8 +4,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
+
 
 namespace AutoMouse
 {
@@ -14,12 +15,14 @@ namespace AutoMouse
         public Form1()
         {
             InitializeComponent();
+            SetFixedPositionAndShowDate();
         }
         //选择：滚动或者粘贴
         private static Boolean boolGun=false;
         private static Boolean boolZhantie=false;
         private static Boolean boolGunShang = false;
-        
+        private static Boolean boolDianJI = false;
+
         private static int count = -100;//默认下滚动
         private int state = -1;//上下
         private int time = 5000;
@@ -42,15 +45,26 @@ namespace AutoMouse
         const int MOUSEEVENTF_ABSOLUTE = 0x8000;        //标示是否采用绝对坐标 
         const int MOUSEEVENTF_WHEEL = 0x800;            //模拟鼠标滑轮移动
 
-        //开始
+
+        //开始 按钮
         private void button1_Click(object sender, EventArgs e)
         {
-            if (false == boolGun && false == boolZhantie && false == boolGunShang)
+            if (false == boolGun && false == boolZhantie && false == boolGunShang && false == boolDianJI)
             {
                 MessageBox.Show("请选择操作类型？ ", "提示!", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
             }
                        
             timer1.Enabled = true;
+            if (true == boolDianJI) {
+                try
+                {
+                    timer1.Interval = 100 * int.Parse(double.Parse(textBox1.Text).ToString());
+                }
+                catch
+                {
+                    timer1.Interval = 500;
+                }
+            }else
             try {                
                 //获取时间间隔 
                 timer1.Interval = 1000*int.Parse(double.Parse(textBox1.Text).ToString());
@@ -58,20 +72,37 @@ namespace AutoMouse
                 //默认时间
                 timer1.Interval = 5000;
             }
+
         }
 
-        //停止
+        //按钮 停止
         private void button2_Click(object sender, EventArgs e)
         {
-            if (false == boolGun && false == boolZhantie && false == boolGunShang)
+            if (false == boolGun && false == boolZhantie && false == boolGunShang && false == boolDianJI)
             {
                 MessageBox.Show("请选择操作类型~", "警告!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            timer1.Enabled = false;
-           // textBox4.Text = "次数";
-            //timer1.Enabled = false;
-        } 
+            TimerStop();
+        }
+
+        /// <summary>
+        /// timer开始
+        /// </summary>
+        private void TimerRun()
+        {
+            timer1.Enabled = true;//设置启用定时器
+            timer1.Interval = 5000;//默认时间
+            timer1.Start();//开启定时器
+        }
+        /// <summary>
+        /// timer停止
+        /// </summary>
+        private void TimerStop()
+        {
+            timer1.Enabled = false;//设置启用定时器
+            timer1.Stop();//停止定时器
+        }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
@@ -80,7 +111,7 @@ namespace AutoMouse
         private void timer1_Tick(object sender, EventArgs e)
         {
             //1 开始滚动
-            if (false == boolGun && false == boolZhantie && false == boolGunShang) return;
+            if (false == boolGun && false == boolZhantie && false == boolGunShang && false == boolDianJI) return;
             if (true == boolGun)//像下滚
             {
                 if (state == 1)
@@ -90,10 +121,8 @@ namespace AutoMouse
                 else
                 {
                     count = -100;//负数代表向下移动
-                }
-
-                //滚动鼠标一次
-                gunDong();
+                }                
+                gunDong();//滚动鼠标一次
             }
             //1.1 向上滚
             if (true == boolGunShang)
@@ -105,9 +134,8 @@ namespace AutoMouse
                 else
                 {
                     count = 100;//正数代表向上移动
-                }
-                //滚动鼠标一次
-                gunDong();
+                }                
+                gunDong();//滚动鼠标一次
             }
             //2 粘贴 并回车
             if (true == boolZhantie) {
@@ -115,17 +143,19 @@ namespace AutoMouse
                 /*KeyEventArgs keyControl = new KeyEventArgs(Keys.Control);
                 KeyCVDown(sender,keyControl);*/
                 KeyCVDown2(sender,e, timeNums);
-
-                //this.KeyDown += new System.Windows.Forms.KeyEventHandler(KeyCVDown);
             }
-         //计数
-            timeNums++;
-            textBox4.Text = "" + timeNums;
+            //连续点击
+            if (true== boolDianJI) {
+                MouseDJ.MouseClick(100, 0);
 
-       /*     if (timer1.Enabled ==true) {
-                timeNums++;
-                textBox4.Text = "" + timeNums;
-            } */         
+                // 模拟鼠标点击事件
+                // SendKeys.SendWait("{RIGHT}");
+                // MessageBox.Show("点击"+ tmptime, "警告!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+            //计数
+            timeNums++;
+            textBox4.Text = "" + timeNums;     
         }
         private void textBox4_TextChanged(object sender, EventArgs e)
         {
@@ -143,7 +173,7 @@ namespace AutoMouse
             }
             catch (Exception eee)
             {
-                timer1.Enabled = false;
+                TimerStop();
                 MessageBox.Show("引发此异常的原因是您输入的滚轮数值为非法格式\n您可以单击“确定”并检查输入信息后重试\n详细错误信息为：" + eee.Message, "错误提示", MessageBoxButtons.OK);
             }
         }
@@ -186,6 +216,11 @@ namespace AutoMouse
         {
             boolGunShang = radioButton3.Checked;
         }
+        //
+        private void radioButton4_CheckedChanged(object sender, EventArgs e)
+        {
+            boolDianJI=radioButton4.Checked;
+        }
 
         // 粘贴是否选中
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
@@ -200,5 +235,22 @@ namespace AutoMouse
         {
 
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void SetFixedPositionAndShowDate()
+        {
+            label1.Location = new Point(208, 8);
+            label1.Text = DateTime.Now.ToString("yyyy-MM-dd");
+        }
+
+        private void label1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+       
     }
 }
