@@ -4,8 +4,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
+
 
 namespace AutoMouse
 {
@@ -20,7 +21,8 @@ namespace AutoMouse
         private static Boolean boolGun=false;
         private static Boolean boolZhantie=false;
         private static Boolean boolGunShang = false;
-        
+        private static Boolean boolDianJI = false;
+
         private static int count = -100;//默认下滚动
         private int state = -1;//上下
         private int time = 5000;
@@ -43,15 +45,26 @@ namespace AutoMouse
         const int MOUSEEVENTF_ABSOLUTE = 0x8000;        //标示是否采用绝对坐标 
         const int MOUSEEVENTF_WHEEL = 0x800;            //模拟鼠标滑轮移动
 
+
         //开始
         private void button1_Click(object sender, EventArgs e)
         {
-            if (false == boolGun && false == boolZhantie && false == boolGunShang)
+            if (false == boolGun && false == boolZhantie && false == boolGunShang && false == boolDianJI)
             {
                 MessageBox.Show("请选择操作类型？ ", "提示!", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
             }
                        
             timer1.Enabled = true;
+            if (true == boolDianJI) {
+                try
+                {
+                    timer1.Interval = 100 * int.Parse(double.Parse(textBox1.Text).ToString());
+                }
+                catch
+                {
+                    timer1.Interval = 500;
+                }
+            }else
             try {                
                 //获取时间间隔 
                 timer1.Interval = 1000*int.Parse(double.Parse(textBox1.Text).ToString());
@@ -59,17 +72,19 @@ namespace AutoMouse
                 //默认时间
                 timer1.Interval = 5000;
             }
+
         }
 
         //停止
         private void button2_Click(object sender, EventArgs e)
         {
-            if (false == boolGun && false == boolZhantie && false == boolGunShang)
+            if (false == boolGun && false == boolZhantie && false == boolGunShang && false == boolDianJI)
             {
                 MessageBox.Show("请选择操作类型~", "警告!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             timer1.Enabled = false;
+            
            // textBox4.Text = "次数";
             //timer1.Enabled = false;
         } 
@@ -81,7 +96,7 @@ namespace AutoMouse
         private void timer1_Tick(object sender, EventArgs e)
         {
             //1 开始滚动
-            if (false == boolGun && false == boolZhantie && false == boolGunShang) return;
+            if (false == boolGun && false == boolZhantie && false == boolGunShang && false == boolDianJI) return;
             if (true == boolGun)//像下滚
             {
                 if (state == 1)
@@ -116,10 +131,17 @@ namespace AutoMouse
                 /*KeyEventArgs keyControl = new KeyEventArgs(Keys.Control);
                 KeyCVDown(sender,keyControl);*/
                 KeyCVDown2(sender,e, timeNums);
-
-                //this.KeyDown += new System.Windows.Forms.KeyEventHandler(KeyCVDown);
             }
-         //计数
+            //连续点击
+            if (true== boolDianJI) {
+
+                MouseDJ.MouseClick(100, 0);
+                // 模拟鼠标点击事件
+               // SendKeys.SendWait("{RIGHT}");
+                // MessageBox.Show("点击"+ tmptime, "警告!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+            //计数
             timeNums++;
             textBox4.Text = "" + timeNums;
 
@@ -187,6 +209,11 @@ namespace AutoMouse
         {
             boolGunShang = radioButton3.Checked;
         }
+        //
+        private void radioButton4_CheckedChanged(object sender, EventArgs e)
+        {
+            boolDianJI=radioButton4.Checked;
+        }
 
         // 粘贴是否选中
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
@@ -216,5 +243,7 @@ namespace AutoMouse
         {
 
         }
+
+       
     }
 }

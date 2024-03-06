@@ -42,6 +42,7 @@ namespace AutoMouse
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.label1 = new System.Windows.Forms.Label();
+            this.radioButton4 = new System.Windows.Forms.RadioButton();
             this.SuspendLayout();
             // 
             // button1
@@ -84,9 +85,9 @@ namespace AutoMouse
             this.textBox2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.textBox2.Location = new System.Drawing.Point(43, 29);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(99, 29);
+            this.textBox2.Size = new System.Drawing.Size(82, 29);
             this.textBox2.TabIndex = 3;
-            this.textBox2.Text = "默认间隔(5s) ";
+            this.textBox2.Text = "默认(5s) ";
             this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // timer1
@@ -99,9 +100,9 @@ namespace AutoMouse
             this.textBox3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.textBox3.Location = new System.Drawing.Point(43, 68);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(99, 29);
+            this.textBox3.Size = new System.Drawing.Size(82, 29);
             this.textBox3.TabIndex = 4;
-            this.textBox3.Text = " 滚动总次数  ";
+            this.textBox3.Text = " 总次数  ";
             this.textBox3.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
             // 
             // textBox4
@@ -166,12 +167,28 @@ namespace AutoMouse
             this.label1.Text = "time";
             this.label1.Click += new System.EventHandler(this.label1_Click_1);
             // 
+            // radioButton4
+            // 
+            this.radioButton4.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.radioButton4.Font = new System.Drawing.Font("微软雅黑", 7.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.radioButton4.ForeColor = System.Drawing.Color.SaddleBrown;
+            this.radioButton4.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.radioButton4.Location = new System.Drawing.Point(12, 44);
+            this.radioButton4.Name = "radioButton4";
+            this.radioButton4.Size = new System.Drawing.Size(25, 79);
+            this.radioButton4.TabIndex = 10;
+            this.radioButton4.TabStop = true;
+            this.radioButton4.Text = "鼠标点击";
+            this.radioButton4.UseVisualStyleBackColor = false;
+            this.radioButton4.CheckedChanged += new System.EventHandler(this.radioButton4_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ClientSize = new System.Drawing.Size(299, 166);
+            this.Controls.Add(this.radioButton4);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.radioButton3);
             this.Controls.Add(this.radioButton2);
@@ -206,6 +223,7 @@ namespace AutoMouse
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton3;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.RadioButton radioButton4;
     }
 }
 
